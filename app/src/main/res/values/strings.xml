@@ -333,7 +333,7 @@
     <string name="ssl_info_issued_to">Issued to</string>
     <string name="ssl_info_issued_on">Issued on</string>
     <string name="ssl_info_expires_on">Expires on</string>
-    
+
     <!-- Search in page -->
     <string name="search_in_page_query">\'%1$s\'</string>
 
@@ -342,4 +342,15 @@
 
     <!-- Search -->
     <string name="search_insert_suggestion">Insert suggestion</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 </resources>

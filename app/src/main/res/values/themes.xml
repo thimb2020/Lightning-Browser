@@ -1,0 +1,12 @@
+<resources>
+
+    <style name="Theme.LightTheme.NoActionBar" parent="Theme.MaterialComponents.Light">
+        <item name="colorPrimary">#4267B2</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.LightningBrowser.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.LightningBrowser.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

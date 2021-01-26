@@ -44,5 +44,5 @@
 
     <color name="ssl_secured">#4CAF50</color>
     <color name="ssl_unsecured">#F44336</color>
-
+    <color name="title_web">#353535</color>
 </resources>
