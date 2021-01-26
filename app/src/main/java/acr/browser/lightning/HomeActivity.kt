@@ -1,5 +1,7 @@
 package acr.browser.lightning
 
+import acr.browser.lightning.database.dao.AppDatabase
+import acr.browser.lightning.database.dao.dao.CategoryDao
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -17,7 +19,7 @@ import androidx.appcompat.widget.Toolbar
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
-
+    private lateinit var db: AppDatabase;
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -38,6 +40,21 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+        navView.setNavigationItemSelectedListener {
+            when (it.itemId) {
+                R.id.nav_home -> {
+                    // handle click
+                    true
+                }
+                else -> false
+            }
+        }
+        db= AppDatabase(this);
+        val categoryDao = db.categoryDao;
+        val listCategory = categoryDao?.getAll();
+        listCategory?.forEach {
+            navView.menu.add(Menu.NONE, it.id, Menu.NONE, it.name);
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
