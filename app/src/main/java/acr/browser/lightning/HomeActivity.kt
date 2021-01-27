@@ -15,11 +15,14 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.FragmentTransaction
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var db: AppDatabase;
+    lateinit var bookFragment: BookFragment
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -40,16 +43,35 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        bookFragment = BookFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, bookFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
+
         navView.setNavigationItemSelectedListener {
             when (it.itemId) {
                 R.id.nav_home -> {
                     // handle click
                     true
                 }
-                else -> false
+                else -> {
+                    bookFragment = BookFragment()
+                    // creating the instance of the bundle
+                    val bundle = Bundle()
+                    // storing the string value in the bundle
+                    // which is mapped to key
+                    bundle.putInt("CategoryId", it.itemId)
+                    bookFragment.arguments = bundle
+                    supportFragmentManager
+                            .beginTransaction()
+                            .replace(R.id.nav_host_fragment, bookFragment)
+                            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                            .commit()
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    true
+                }
             }
         }
-        db= AppDatabase(this);
+        db = AppDatabase(this);
         val categoryDao = db.categoryDao;
         val listCategory = categoryDao?.getAll();
         listCategory?.forEach {

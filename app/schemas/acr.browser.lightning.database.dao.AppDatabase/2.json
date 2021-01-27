@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "b759edb5c8abdb411da01625b7ee1707",
+    "identityHash": "fcaa3621561359c8ec570e874cdaa72f",
     "entities": [
       {
         "tableName": "category",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `description` TEXT, `icon_name` TEXT, `start` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `start` INTEGER)",
         "fields": [
           {
             "fieldPath": "id",
@@ -21,14 +21,40 @@
             "notNull": false
           },
           {
-            "fieldPath": "description",
-            "columnName": "description",
+            "fieldPath": "start",
+            "columnName": "start",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "story",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `category_id` TEXT, `start` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
             "affinity": "TEXT",
             "notNull": false
           },
           {
-            "fieldPath": "icon_name",
-            "columnName": "icon_name",
+            "fieldPath": "category_id",
+            "columnName": "category_id",
             "affinity": "TEXT",
             "notNull": false
           },
@@ -52,7 +78,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b759edb5c8abdb411da01625b7ee1707')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'fcaa3621561359c8ec570e874cdaa72f')"
     ]
   }
 }

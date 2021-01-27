@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Blob
 
-@Entity(tableName = "category")
-data class Category(
+@Entity(tableName = "country")
+data class Country(
         @PrimaryKey(autoGenerate = true)
         var id: Int,
         @ColumnInfo(name = "name", ) var name: String?,
-        @ColumnInfo(name = "start") var start: Int?,
+        @ColumnInfo(name = "code") var start: Int?,
 )

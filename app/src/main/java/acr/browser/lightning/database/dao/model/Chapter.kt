@@ -5,10 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.sql.Blob
 
-@Entity(tableName = "category")
-data class Category(
+@Entity(tableName = "chapter")
+data class Chapter(
         @PrimaryKey(autoGenerate = true)
         var id: Int,
         @ColumnInfo(name = "name", ) var name: String?,
-        @ColumnInfo(name = "start") var start: Int?,
+        @ColumnInfo(name = "story_id") var start: Int?,
+        @ColumnInfo(name = "url") var icon_name: String?,
+
 )
