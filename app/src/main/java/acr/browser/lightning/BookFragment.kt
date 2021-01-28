@@ -26,13 +26,12 @@ class BookFragment : Fragment() {
 
     private var categoryId = -1
     private lateinit var db: AppDatabase;
-    private var bookItems: ArrayList<BookItem> = ArrayList()
+    private var chapters: List<Chapter> = ArrayList()
 
     @Inject
     internal lateinit var bookmarkModel: BookmarkRepository
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         arguments?.let {
             categoryId = it.getInt(CATEGORY_ID)
         }
@@ -41,39 +40,19 @@ class BookFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_book_list, container, false)
-
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-/*                layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context)
-                    else -> GridLayoutManager(context, columnCount)
-                }*/
                 db = AppDatabase(context)
                 val bookDao = db.bookDao
                 var books: List<Book> = ArrayList()
-                var chapters: List<Chapter> = ArrayList()
                 if (categoryId == -1) {
                     chapters = bookDao?.getStartChapters()!!
                 } else {
-                    books = bookDao?.getBooksByCategory(categoryId)!!
-                }
-
-
-                val forEach = books?.forEach {
-                    val di = BookItem()
-                    di.isBook = true;
-                    di.book = it
-                    bookItems.add(di)
-                }
-                chapters.forEach {
-                    val di = BookItem()
-                    di.isBook = false;
-                    di.chapter = it
-                    bookItems.add(di)
+                    chapters = bookDao?.getChaptersByCategory(categoryId)!!
                 }
             }
-            view.adapter = BookItemRecyclerViewAdapter(bookItems)
+            view.adapter = BookItemRecyclerViewAdapter(chapters)
         }
         return view
     }
@@ -81,6 +60,7 @@ class BookFragment : Fragment() {
     companion object {
         // TODO: Customize parameter argument names
         const val CATEGORY_ID = "CategoryId"
+
         // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(CategoryId: Int) =
