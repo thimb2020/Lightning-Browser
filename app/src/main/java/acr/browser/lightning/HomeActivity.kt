@@ -2,8 +2,11 @@ package acr.browser.lightning
 
 import acr.browser.lightning.database.dao.AppDatabase
 import acr.browser.lightning.database.dao.dao.CategoryDao
+import acr.browser.lightning.settings.activity.SettingsActivity
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -15,6 +18,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 
@@ -42,6 +46,7 @@ class HomeActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, bookFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
 
         navView.setNavigationItemSelectedListener {
+            supportActionBar?.title = it?.title
             bookFragment = BookFragment()
             val bundle = Bundle()
             bundle.putInt("CategoryId", it.itemId)
@@ -66,6 +71,23 @@ class HomeActivity : AppCompatActivity() {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.home, menu)
         return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_home -> {
+                var intent = Intent(this, HomeActivity::class.java)
+                ContextCompat.startActivity(this, intent, null)
+            }
+            R.id.action_settings -> {
+                var intent = Intent(this, SettingsActivity::class.java)
+                ContextCompat.startActivity(this, intent, null)
+            }
+            R.id.action_share -> CommonUtils.shareApp(this)
+            R.id.action_rating -> CommonUtils.ratingApp(this)
+            R.id.action_more -> CommonUtils.goToMyStore(this)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     override fun onSupportNavigateUp(): Boolean {

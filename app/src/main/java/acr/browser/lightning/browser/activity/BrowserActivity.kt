@@ -4,9 +4,7 @@
 
 package acr.browser.lightning.browser.activity
 
-import acr.browser.lightning.AppTheme
-import acr.browser.lightning.IncognitoActivity
-import acr.browser.lightning.R
+import acr.browser.lightning.*
 import acr.browser.lightning.browser.*
 import acr.browser.lightning.browser.bookmarks.BookmarksDrawerView
 import acr.browser.lightning.browser.cleanup.ExitCleanup
@@ -101,6 +99,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     private var searchView: SearchView? = null
     private var homeImageView: ImageView? = null
     private var tabCountView: TabCountView? = null
+    private var bookmarkFL: FrameLayout? = null
+    private var homeFL: FrameLayout? = null
 
     // Current tab view being displayed
     private var currentTabView: View? = null
@@ -279,6 +279,9 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             height = LayoutParams.MATCH_PARENT
         }
 
+        bookmarkFL = customView.findViewById(R.id.bookmark_fl)
+        homeFL = customView.findViewById(R.id.home_fl)
+
         tabCountView = customView.findViewById(R.id.tab_count_view)
         homeImageView = customView.findViewById(R.id.home_image_view)
         if (shouldShowTabsInDrawer && !isIncognito()) {
@@ -302,6 +305,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         mainHandler.post { drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED, getBookmarkDrawer()) }
 
         customView.findViewById<FrameLayout>(R.id.home_button).setOnClickListener(this)
+        customView.findViewById<FrameLayout>(R.id.bookmark_fl).setOnClickListener(this)
+        customView.findViewById<FrameLayout>(R.id.home_fl).setOnClickListener(this)
 
         // create the search EditText in the ToolBar
         searchView = customView.findViewById<SearchView>(R.id.search).apply {
@@ -1752,6 +1757,11 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     override fun onClick(v: View) {
         val currentTab = tabsManager.currentTab ?: return
         when (v.id) {
+            R.id.bookmark_fl -> openBookmarks()
+            R.id.home_fl -> {
+                var intent = Intent(this, HomeActivity::class.java)
+                ContextCompat.startActivity(this, intent, null)
+            }
             R.id.home_button -> when {
                 searchView?.hasFocus() == true -> currentTab.requestFocus()
                 shouldShowTabsInDrawer -> drawer_layout.openDrawer(getTabDrawer())

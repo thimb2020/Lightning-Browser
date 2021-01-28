@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-    <string name="share_app_title">England News - Top News App</string>
+    <string name="share_app_title">US News - Top News App</string>
     <string name="app_url">https://play.google.com/store/apps/details?id=com.worldnews.england</string>
-    <string name="rating_url">market://details?id=com.worldnews.england</string>
+    <string name="rating_url">market://details?id=com.worldnews.us</string>
     <string name="store_url">market://search?q=pub:World News, Inc.</string>
     <string name="contact_email">smarterworldnews365@gmail.com</string>
     <string name="org_name">World News, Inc.</string>
+
+    <string name="action_home">Home</string>
+    <string name="action_rating">Rating</string>
+    <string name="action_more">More apps</string>
 
     <string name="app_name">Lightning</string>
     <string name="action_new_tab">New tab</string>
@@ -352,7 +356,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">World News, Inc.</string>
-    <string name="nav_header_subtitle">worlnews365@gmail.com</string>
+    <string name="nav_header_subtitle">worldnews364@gmail.com</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
