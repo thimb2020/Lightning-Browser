@@ -27,7 +27,8 @@ class NetscapeBookmarkFormatImporter @Inject constructor() : BookmarkImporter {
      * @return The [List] of [Bookmark.Entry] held by [Element] with the provided [folderName].
      */
     private fun Element.processFolder(folderName: String): List<Bookmark.Entry> {
-        return children()
+        return  emptyList()
+/*        return children()
             .filter { it.isTag(ITEM_TAG) }
             .flatMap {
                 val immediateChild = it.child(0)
@@ -44,7 +45,7 @@ class NetscapeBookmarkFormatImporter @Inject constructor() : BookmarkImporter {
                         ))
                     else -> emptyList()
                 }
-            }
+            }*/
     }
 
     /**

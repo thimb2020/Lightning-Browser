@@ -177,8 +177,7 @@ public final class BookmarkExporter {
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
                 "BookmarksExport-" + counter + ".txt");
         }
-
-        return bookmarksExport;
+       return bookmarksExport;
     }
 
 }

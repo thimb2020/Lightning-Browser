@@ -11,6 +11,6 @@ data class Chapter(
         var id: Int,
         @ColumnInfo(name = "name", ) var name: String?,
         @ColumnInfo(name = "story_id") var start: Int?,
-        @ColumnInfo(name = "url") var icon_name: String?,
+        @ColumnInfo(name = "url") var url: String?,
 
 )

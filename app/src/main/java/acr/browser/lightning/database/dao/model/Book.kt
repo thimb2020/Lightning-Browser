@@ -10,6 +10,6 @@ data class Book(
         @PrimaryKey(autoGenerate = true)
         var id: Int,
         @ColumnInfo(name = "name", ) var name: String?,
-        @ColumnInfo(name = "category_id") var category_id: String?,
+        @ColumnInfo(name = "category_id") var category_id: Int?,
         @ColumnInfo(name = "start") var start: Int?,
 )

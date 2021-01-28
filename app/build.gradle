@@ -75,14 +75,14 @@ android {
         lightningPlus {
             dimension "capabilities"
             buildConfigField "boolean", "FULL_VERSION", "Boolean.parseBoolean(\"true\")"
-            applicationId "acr.browser.lightning"
+            applicationId "com.java.abc"
             versionCode 101
         }
 
         lightningLite {
             dimension "capabilities"
             buildConfigField "boolean", "FULL_VERSION", "Boolean.parseBoolean(\"false\")"
-            applicationId "acr.browser.barebones"
+            applicationId "com.java.abc"
             versionCode 102
         }
     }
@@ -100,6 +100,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
     }
 }
 
