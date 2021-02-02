@@ -75,14 +75,14 @@ android {
         lightningPlus {
             dimension "capabilities"
             buildConfigField "boolean", "FULL_VERSION", "Boolean.parseBoolean(\"true\")"
-            applicationId "com.java.abc"
+            applicationId "com.java.abcd"
             versionCode 101
         }
 
         lightningLite {
             dimension "capabilities"
             buildConfigField "boolean", "FULL_VERSION", "Boolean.parseBoolean(\"false\")"
-            applicationId "com.java.abc"
+            applicationId "com.java.abcd"
             versionCode 102
         }
     }

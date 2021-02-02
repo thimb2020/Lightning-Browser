@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 2,
-    "identityHash": "7f8a43079c49047ae0652b8ad0023051",
+    "version": 4,
+    "identityHash": "55427336592d10505d7a0c0d15a92df6",
     "entities": [
       {
         "tableName": "category",
@@ -114,7 +114,7 @@
       },
       {
         "tableName": "country",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` INTEGER)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `code` TEXT)",
         "fields": [
           {
             "fieldPath": "id",
@@ -131,7 +131,7 @@
           {
             "fieldPath": "start",
             "columnName": "code",
-            "affinity": "INTEGER",
+            "affinity": "TEXT",
             "notNull": false
           }
         ],
@@ -148,7 +148,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '7f8a43079c49047ae0652b8ad0023051')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '55427336592d10505d7a0c0d15a92df6')"
     ]
   }
 }

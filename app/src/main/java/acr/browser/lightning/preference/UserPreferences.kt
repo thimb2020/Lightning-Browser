@@ -25,7 +25,12 @@ class UserPreferences @Inject constructor(
     @UserPrefs preferences: SharedPreferences,
     screenSize: ScreenSize
 ) {
-
+    /**
+     * The index of the chosen search engine.
+     *
+     * @see SearchEngineProvider
+     */
+    var translateChoice by preferences.intPreference(TRANSLATE, -1)
     /**
      * True if Web RTC is enabled in the browser, false otherwise.
      */
@@ -305,6 +310,7 @@ private const val POPUPS = "newwindows"
 private const val RESTORE_LOST_TABS = "restoreclosed"
 private const val SAVE_PASSWORDS = "passwords"
 private const val SEARCH = "search"
+private const val TRANSLATE = "translate"
 private const val SEARCH_URL = "searchurl"
 private const val TEXT_REFLOW = "textreflow"
 private const val TEXT_SIZE = "textsize"

@@ -665,7 +665,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         val currentUrl = currentView?.url
         // Handle action buttons
         when (item.itemId) {
-            android.R.id.home -> {
+              android.R.id.home -> {
                 if (drawer_layout.isDrawerOpen(getBookmarkDrawer())) {
                     drawer_layout.closeDrawer(getBookmarkDrawer())
                 }

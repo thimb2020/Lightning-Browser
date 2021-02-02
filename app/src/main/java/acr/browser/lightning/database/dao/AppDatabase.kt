@@ -2,9 +2,11 @@ package acr.browser.lightning.database.dao
 
 import acr.browser.lightning.database.dao.dao.BookDao
 import acr.browser.lightning.database.dao.dao.CategoryDao
+import acr.browser.lightning.database.dao.dao.CountryDao
 import acr.browser.lightning.database.dao.model.Book
 import acr.browser.lightning.database.dao.model.Category
 import acr.browser.lightning.database.dao.model.Chapter
+import acr.browser.lightning.database.dao.model.Country
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
@@ -16,10 +18,11 @@ import androidx.room.RoomDatabase
  * Date:2018/6/15 下午5:07<br></br>
  * Desc: <br></br>
  */
-@Database(entities = [Category::class, Book::class, Chapter::class], version = 2)
+@Database(entities = [Category::class, Book::class, Chapter::class, Country::class], version = 4)
 abstract class AppDatabase : RoomDatabase() {
     abstract val categoryDao: CategoryDao?
     abstract  val bookDao: BookDao?
+    abstract  val countryDao: CountryDao?
 
     companion object {
         @Volatile private var instance: AppDatabase? = null

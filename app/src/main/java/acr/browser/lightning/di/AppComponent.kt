@@ -38,7 +38,6 @@ interface AppComponent {
 
         fun build(): AppComponent
     }
-
     fun inject(activity: BrowserActivity)
 
     fun inject(fragment: BookmarkSettingsFragment)
@@ -73,7 +72,9 @@ interface AppComponent {
 
     fun inject(searchBoxModel: SearchBoxModel)
 
+
     fun inject(generalSettingsFragment: GeneralSettingsFragment)
+    fun inject(translateSettingsFragment: TranslateSettingsFragment)
 
     fun inject(displaySettingsFragment: DisplaySettingsFragment)
 

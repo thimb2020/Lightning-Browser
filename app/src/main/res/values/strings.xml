@@ -11,7 +11,11 @@
     <string name="action_rating">Rating</string>
     <string name="action_more">More apps</string>
 
-    <string name="app_name">Lightning</string>
+    <string name="title_translate">Translate</string>
+    <string name="settings_translate">Translate Settings</string>
+    <string name="translate">Translate</string>
+
+    <string name="app_name">US News</string>
     <string name="action_new_tab">New tab</string>
     <string name="action_share">Share</string>
     <string name="action_history">History</string>
