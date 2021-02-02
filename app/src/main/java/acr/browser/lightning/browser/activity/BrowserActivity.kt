@@ -16,6 +16,7 @@ import acr.browser.lightning.database.HistoryEntry
 import acr.browser.lightning.database.SearchSuggestion
 import acr.browser.lightning.database.WebPage
 import acr.browser.lightning.database.bookmark.BookmarkRepository
+import acr.browser.lightning.database.dao.AppDatabase
 import acr.browser.lightning.database.history.HistoryRepository
 import acr.browser.lightning.di.*
 import acr.browser.lightning.dialog.BrowserDialog
@@ -93,6 +94,7 @@ import javax.inject.Inject
 import kotlin.system.exitProcess
 
 abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIController, OnClickListener {
+    private lateinit var db: AppDatabase;
 
     // Toolbar Views
     private var searchBackground: View? = null
@@ -135,28 +137,75 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     private var findResult: FindResults? = null
 
     // The singleton BookmarkManager
-    @Inject lateinit var bookmarkManager: BookmarkRepository
-    @Inject lateinit var historyModel: HistoryRepository
-    @Inject lateinit var searchBoxModel: SearchBoxModel
-    @Inject lateinit var searchEngineProvider: SearchEngineProvider
-    @Inject lateinit var inputMethodManager: InputMethodManager
-    @Inject lateinit var clipboardManager: ClipboardManager
-    @Inject lateinit var notificationManager: NotificationManager
-    @Inject @field:DiskScheduler lateinit var diskScheduler: Scheduler
-    @Inject @field:DatabaseScheduler lateinit var databaseScheduler: Scheduler
-    @Inject @field:MainScheduler lateinit var mainScheduler: Scheduler
-    @Inject lateinit var tabsManager: TabsManager
-    @Inject lateinit var homePageFactory: HomePageFactory
-    @Inject lateinit var bookmarkPageFactory: BookmarkPageFactory
-    @Inject lateinit var historyPageFactory: HistoryPageFactory
-    @Inject lateinit var historyPageInitializer: HistoryPageInitializer
-    @Inject lateinit var downloadPageInitializer: DownloadPageInitializer
-    @Inject lateinit var homePageInitializer: HomePageInitializer
-    @Inject @field:MainHandler lateinit var mainHandler: Handler
-    @Inject lateinit var proxyUtils: ProxyUtils
-    @Inject lateinit var logger: Logger
-    @Inject lateinit var bookmarksDialogBuilder: LightningDialogBuilder
-    @Inject lateinit var exitCleanup: ExitCleanup
+    @Inject
+    lateinit var bookmarkManager: BookmarkRepository
+
+    @Inject
+    lateinit var historyModel: HistoryRepository
+
+    @Inject
+    lateinit var searchBoxModel: SearchBoxModel
+
+    @Inject
+    lateinit var searchEngineProvider: SearchEngineProvider
+
+    @Inject
+    lateinit var inputMethodManager: InputMethodManager
+
+    @Inject
+    lateinit var clipboardManager: ClipboardManager
+
+    @Inject
+    lateinit var notificationManager: NotificationManager
+
+    @Inject
+    @field:DiskScheduler
+    lateinit var diskScheduler: Scheduler
+
+    @Inject
+    @field:DatabaseScheduler
+    lateinit var databaseScheduler: Scheduler
+
+    @Inject
+    @field:MainScheduler
+    lateinit var mainScheduler: Scheduler
+
+    @Inject
+    lateinit var tabsManager: TabsManager
+
+    @Inject
+    lateinit var homePageFactory: HomePageFactory
+
+    @Inject
+    lateinit var bookmarkPageFactory: BookmarkPageFactory
+
+    @Inject
+    lateinit var historyPageFactory: HistoryPageFactory
+
+    @Inject
+    lateinit var historyPageInitializer: HistoryPageInitializer
+
+    @Inject
+    lateinit var downloadPageInitializer: DownloadPageInitializer
+
+    @Inject
+    lateinit var homePageInitializer: HomePageInitializer
+
+    @Inject
+    @field:MainHandler
+    lateinit var mainHandler: Handler
+
+    @Inject
+    lateinit var proxyUtils: ProxyUtils
+
+    @Inject
+    lateinit var logger: Logger
+
+    @Inject
+    lateinit var bookmarksDialogBuilder: LightningDialogBuilder
+
+    @Inject
+    lateinit var exitCleanup: ExitCleanup
 
     // Image
     private var webPageBitmap: Bitmap? = null
@@ -218,15 +267,15 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         }
 
         presenter = BrowserPresenter(
-            this,
-            isIncognito(),
-            userPreferences,
-            tabsManager,
-            mainScheduler,
-            homePageFactory,
-            bookmarkPageFactory,
-            RecentTabModel(),
-            logger
+                this,
+                isIncognito(),
+                userPreferences,
+                tabsManager,
+                mainScheduler,
+                homePageFactory,
+                bookmarkPageFactory,
+                RecentTabModel(),
+                logger
         )
 
         initialize(savedInstanceState)
@@ -408,9 +457,9 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     }
 
     private inner class SearchListenerClass : OnKeyListener,
-        OnEditorActionListener,
-        OnFocusChangeListener,
-        SearchView.PreFocusListener {
+            OnEditorActionListener,
+            OnFocusChangeListener,
+            SearchView.PreFocusListener {
 
         override fun onKey(view: View, keyCode: Int, keyEvent: KeyEvent): Boolean {
             when (keyCode) {
@@ -433,11 +482,11 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             // hide the keyboard and search the web when the enter key
             // button is pressed
             if (actionId == EditorInfo.IME_ACTION_GO
-                || actionId == EditorInfo.IME_ACTION_DONE
-                || actionId == EditorInfo.IME_ACTION_NEXT
-                || actionId == EditorInfo.IME_ACTION_SEND
-                || actionId == EditorInfo.IME_ACTION_SEARCH
-                || arg2?.action == KeyEvent.KEYCODE_ENTER) {
+                    || actionId == EditorInfo.IME_ACTION_DONE
+                    || actionId == EditorInfo.IME_ACTION_NEXT
+                    || actionId == EditorInfo.IME_ACTION_SEND
+                    || actionId == EditorInfo.IME_ACTION_SEARCH
+                    || arg2?.action == KeyEvent.KEYCODE_ENTER) {
                 searchView?.let {
                     inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
                     searchTheWeb(it.text.toString())
@@ -593,8 +642,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
                     KeyEvent.KEYCODE_T -> {
                         // Open new tab
                         presenter?.newTab(
-                            homePageInitializer,
-                            true
+                                homePageInitializer,
+                                true
                         )
                         return true
                     }
@@ -665,7 +714,20 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         val currentUrl = currentView?.url
         // Handle action buttons
         when (item.itemId) {
-              android.R.id.home -> {
+            R.id.action_translate -> {
+                val currUrl = tabsManager.currentTab?.url
+                val countryId = userPreferences.translateChoice
+                db = AppDatabase(this)
+                val country = db.countryDao?.findById(countryId)
+                if (country != null) {
+                    val url = "https://translate.google.com/translate?hl=" + country.code +
+                            "&sl=auto&tl=" + country.code + "&u=" + currUrl;
+                    tabsManager.lastTab()?.loadUrl(url);
+
+                }
+                return true
+            }
+            android.R.id.home -> {
                 if (drawer_layout.isDrawerOpen(getBookmarkDrawer())) {
                     drawer_layout.closeDrawer(getBookmarkDrawer())
                 }
@@ -685,8 +747,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             }
             R.id.action_add_to_homescreen -> {
                 if (currentView != null
-                    && currentView.url.isNotBlank()
-                    && !currentView.url.isSpecialUrl()) {
+                        && currentView.url.isNotBlank()
+                        && !currentView.url.isSpecialUrl()) {
                     HistoryEntry(currentView.url, currentView.title).also {
                         Utils.createShortcut(this, it, currentView.favicon ?: webPageBitmap!!)
                         logger.log(TAG, "Creating shortcut: ${it.title} ${it.url}")
@@ -758,13 +820,13 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
     private fun deleteBookmark(title: String, url: String) {
         bookmarkManager.deleteBookmark(Bookmark.Entry(url, title, 0, Bookmark.Folder.Root))
-            .subscribeOn(databaseScheduler)
-            .observeOn(mainScheduler)
-            .subscribe { boolean ->
-                if (boolean) {
-                    handleBookmarksChange()
+                .subscribeOn(databaseScheduler)
+                .observeOn(mainScheduler)
+                .subscribe { boolean ->
+                    if (boolean) {
+                        handleBookmarksChange()
+                    }
                 }
-            }
     }
 
     private fun putToolbarInRoot() {
@@ -788,21 +850,21 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     }
 
     private fun setWebViewTranslation(translation: Float) =
-        if (isFullScreen) {
-            currentTabView?.translationY = translation
-        } else {
-            currentTabView?.translationY = 0f
-        }
+            if (isFullScreen) {
+                currentTabView?.translationY = translation
+            } else {
+                currentTabView?.translationY = 0f
+            }
 
     /**
      * method that shows a dialog asking what string the user wishes to search
      * for. It highlights the text entered.
      */
     private fun findInPage() = BrowserDialog.showEditText(
-        this,
-        R.string.action_find,
-        R.string.search_hint,
-        R.string.search_hint
+            this,
+            R.string.action_find,
+            R.string.search_hint,
+            R.string.search_hint
     ) { text ->
         if (text.isNotEmpty()) {
             findResult = presenter?.findInPage(text)
@@ -828,13 +890,13 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             return
         }
         BrowserDialog.show(this, R.string.dialog_title_close_browser,
-            DialogItem(title = R.string.close_tab) {
-                presenter?.deleteTab(position)
-            },
-            DialogItem(title = R.string.close_other_tabs) {
-                presenter?.closeAllOtherTabs()
-            },
-            DialogItem(title = R.string.close_all_tabs, onClick = this::closeBrowser))
+                DialogItem(title = R.string.close_tab) {
+                    presenter?.deleteTab(position)
+                },
+                DialogItem(title = R.string.close_other_tabs) {
+                    presenter?.closeAllOtherTabs()
+                },
+                DialogItem(title = R.string.close_all_tabs, onClick = this::closeBrowser))
     }
 
     override fun notifyTabViewRemoved(position: Int) {
@@ -919,12 +981,12 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
     override fun showBlockedLocalFileDialog(onPositiveClick: Function0<Unit>) {
         AlertDialog.Builder(this)
-            .setCancelable(true)
-            .setTitle(R.string.title_warning)
-            .setMessage(R.string.message_blocked_local)
-            .setNegativeButton(android.R.string.cancel, null)
-            .setPositiveButton(R.string.action_open) { _, _ -> onPositiveClick.invoke() }
-            .resizeAndShow()
+                .setCancelable(true)
+                .setTitle(R.string.title_warning)
+                .setMessage(R.string.message_blocked_local)
+                .setNegativeButton(android.R.string.cancel, null)
+                .setPositiveButton(R.string.action_open) { _, _ -> onPositiveClick.invoke() }
+                .resizeAndShow()
     }
 
     override fun showSnackbar(@StringRes resource: Int) = snackbar(resource)
@@ -939,8 +1001,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
     override fun newTabButtonClicked() {
         presenter?.newTab(
-            homePageInitializer,
-            true
+                homePageInitializer,
+                true
         )
     }
 
@@ -958,15 +1020,15 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
         if (!url.isSpecialUrl()) {
             bookmarkManager.isBookmark(url)
-                .subscribeOn(databaseScheduler)
-                .observeOn(mainScheduler)
-                .subscribe { boolean ->
-                    if (boolean) {
-                        deleteBookmark(title, url)
-                    } else {
-                        addBookmark(title, url)
+                    .subscribeOn(databaseScheduler)
+                    .observeOn(mainScheduler)
+                    .subscribe { boolean ->
+                        if (boolean) {
+                            deleteBookmark(title, url)
+                        } else {
+                            addBookmark(title, url)
+                        }
                     }
-                }
         }
     }
 
@@ -978,10 +1040,10 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
     override fun handleHistoryChange() {
         historyPageFactory
-            .buildPage()
-            .subscribeOn(databaseScheduler)
-            .observeOn(mainScheduler)
-            .subscribeBy(onSuccess = { tabsManager.currentTab?.reload() })
+                .buildPage()
+                .subscribeOn(databaseScheduler)
+                .observeOn(mainScheduler)
+                .subscribeBy(onSuccess = { tabsManager.currentTab?.reload() })
     }
 
     protected fun handleNewIntent(intent: Intent) {
@@ -1008,20 +1070,20 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     }
 
     private fun initializeToolbarHeight(configuration: Configuration) =
-        ui_layout.doOnLayout {
-            // TODO externalize the dimensions
-            val toolbarSize = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
-                R.dimen.toolbar_height_portrait
-            } else {
-                R.dimen.toolbar_height_landscape
+            ui_layout.doOnLayout {
+                // TODO externalize the dimensions
+                val toolbarSize = if (configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    R.dimen.toolbar_height_portrait
+                } else {
+                    R.dimen.toolbar_height_landscape
+                }
+                toolbar.layoutParams = (toolbar.layoutParams as ConstraintLayout.LayoutParams).apply {
+                    height = dimen(toolbarSize)
+                }
+                toolbar.minimumHeight = toolbarSize
+                toolbar.doOnLayout { setWebViewTranslation(toolbar_layout.height.toFloat()) }
+                toolbar.requestLayout()
             }
-            toolbar.layoutParams = (toolbar.layoutParams as ConstraintLayout.LayoutParams).apply {
-                height = dimen(toolbarSize)
-            }
-            toolbar.minimumHeight = toolbarSize
-            toolbar.doOnLayout { setWebViewTranslation(toolbar_layout.height.toFloat()) }
-            toolbar.requestLayout()
-        }
 
     override fun closeBrowser() {
         currentTabView.removeFromParent()
@@ -1193,7 +1255,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
                     currentUiColor = animatedColor
                     toolbar_layout.setBackgroundColor(animatedColor)
                     searchBackground?.background?.tint(
-                        DrawableUtils.mixColor(interpolatedTime, startSearchColor, finalSearchColor)
+                            DrawableUtils.mixColor(interpolatedTime, startSearchColor, finalSearchColor)
                     )
                 }
             }
@@ -1203,11 +1265,11 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
     }
 
     private fun getSearchBarColor(requestedColor: Int, defaultColor: Int): Int =
-        if (requestedColor == defaultColor) {
-            if (isDarkTheme) DrawableUtils.mixColor(0.25f, defaultColor, Color.WHITE) else Color.WHITE
-        } else {
-            DrawableUtils.mixColor(0.25f, requestedColor, Color.WHITE)
-        }
+            if (requestedColor == defaultColor) {
+                if (isDarkTheme) DrawableUtils.mixColor(0.25f, defaultColor, Color.WHITE) else Color.WHITE
+            } else {
+                DrawableUtils.mixColor(0.25f, requestedColor, Color.WHITE)
+            }
 
     @ColorInt
     override fun getUiColor(): Int = currentUiColor
@@ -1241,8 +1303,8 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         }
 
         historyModel.visitHistoryEntry(url, title)
-            .subscribeOn(databaseScheduler)
-            .subscribe()
+                .subscribeOn(databaseScheduler)
+                .subscribe()
     }
 
     /**
@@ -1280,15 +1342,15 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
      */
     private fun openHistory() {
         presenter?.newTab(
-            historyPageInitializer,
-            true
+                historyPageInitializer,
+                true
         )
     }
 
     private fun openDownloads() {
         presenter?.newTab(
-            downloadPageInitializer,
-            true
+                downloadPageInitializer,
+                true
         )
     }
 
@@ -1402,10 +1464,10 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             arrayOf(Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
                 putExtra("PhotoPath", cameraPhotoPath)
                 putExtra(
-                    MediaStore.EXTRA_OUTPUT,
-                    Uri.fromFile(Utils.createImageFile().also { file ->
-                        cameraPhotoPath = "file:${file.absolutePath}"
-                    })
+                        MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(Utils.createImageFile().also { file ->
+                            cameraPhotoPath = "file:${file.absolutePath}"
+                        })
                 )
             })
         } catch (ex: IOException) {
@@ -1580,16 +1642,16 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         if (enabled) {
             if (immersive) {
                 decor.systemUiVisibility = (SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                    or SYSTEM_UI_FLAG_FULLSCREEN
-                    or SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+                        or SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        or SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        or SYSTEM_UI_FLAG_FULLSCREEN
+                        or SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
             } else {
                 decor.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE
             }
             window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN)
         } else {
             window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
             decor.systemUiVisibility = SYSTEM_UI_FLAG_VISIBLE
@@ -1795,12 +1857,12 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
      * If the [drawer] is open, close it and return true. Return false otherwise.
      */
     private fun DrawerLayout.closeDrawerIfOpen(drawer: View): Boolean =
-        if (isDrawerOpen(drawer)) {
-            closeDrawer(drawer)
-            true
-        } else {
-            false
-        }
+            if (isDrawerOpen(drawer)) {
+                closeDrawer(drawer)
+                true
+            } else {
+                false
+            }
 
     companion object {
 

@@ -10,5 +10,5 @@ data class Country(
         @PrimaryKey(autoGenerate = true)
         var id: Int,
         @ColumnInfo(name = "name", ) var name: String?,
-        @ColumnInfo(name = "code") var start: String?,
+        @ColumnInfo(name = "code") var code: String?,
 )
