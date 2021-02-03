@@ -1,6 +1,7 @@
 <!-- Copyright 2014 ACR Development -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:id="@+id/coordinator_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -22,7 +23,15 @@
                 <include layout="@layout/toolbar"/>
 
                 <include layout="@layout/browser_content"/>
-
+                <com.google.android.gms.ads.AdView
+                    android:id="@+id/adView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:adSize="BANNER"
+                    app:adUnitId="ca-app-pub-3940256099942544/6300978111">
+                </com.google.android.gms.ads.AdView>
                 <include layout="@layout/search_interface"/>
             </LinearLayout>
 

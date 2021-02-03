@@ -81,6 +81,8 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.palette.graphics.Palette
 import butterknife.ButterKnife
 import com.anthonycr.grant.PermissionsManager
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.rxkotlin.subscribeBy
@@ -95,6 +97,7 @@ import kotlin.system.exitProcess
 
 abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIController, OnClickListener {
     private lateinit var db: AppDatabase;
+    private lateinit var mAdView: AdView;
 
     // Toolbar Views
     private var searchBackground: View? = null
@@ -251,6 +254,9 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         super.onCreate(savedInstanceState)
         injector.inject(this)
         setContentView(R.layout.activity_main)
+        mAdView = findViewById(R.id.adView)
+        val adRequest = AdRequest.Builder().build()
+        mAdView.loadAd(adRequest)
         ButterKnife.bind(this)
 
         if (isIncognito()) {
