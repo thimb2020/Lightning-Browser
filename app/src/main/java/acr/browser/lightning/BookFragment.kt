@@ -18,6 +18,10 @@ import android.util.Log
 import javax.inject.Inject
 import acr.browser.lightning.browser.bookmarks.BookmarksViewModel
 import acr.browser.lightning.database.Bookmark
+import java.text.Collator
+import java.util.*
+import kotlin.Comparator
+import kotlin.collections.ArrayList
 
 /**
  * A fragment representing a list of Items.
@@ -48,10 +52,14 @@ class BookFragment : Fragment() {
                 var books: List<Book> = ArrayList()
                 if (categoryId == -1) {
                     chapters = bookDao?.getStartChapters()!!
+                    if (chapters.isEmpty()) {
+                        chapters = bookDao.findAllChapter();
+                    }
                 } else {
                     chapters = bookDao?.getChaptersByCategory(categoryId)!!
                 }
             }
+            chapters = chapters.sortedWith(Comparator { t1, t2 -> Collator.getInstance(Locale.FRANCE).compare(t1.name,t2.name) })
             view.adapter = BookItemRecyclerViewAdapter(chapters)
         }
         return view

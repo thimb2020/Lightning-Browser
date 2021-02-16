@@ -33,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun buildDatabase(context: Context) = Room.databaseBuilder(context,
-                AppDatabase::class.java, "usnews.db").createFromAsset("usnews.db").fallbackToDestructiveMigration().allowMainThreadQueries()
+                AppDatabase::class.java, "sites.db").createFromAsset("sites.db").fallbackToDestructiveMigration().allowMainThreadQueries()
                 .build()
     }
 }

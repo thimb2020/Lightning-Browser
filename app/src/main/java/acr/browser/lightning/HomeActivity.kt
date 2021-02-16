@@ -24,6 +24,9 @@ import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.ads.initialization.InitializationStatus
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
+import java.text.Collator
+import java.util.*
+import kotlin.Comparator
 
 class HomeActivity : AppCompatActivity() {
 
@@ -65,7 +68,8 @@ class HomeActivity : AppCompatActivity() {
         }
         db = AppDatabase(this);
         val categoryDao = db.categoryDao;
-        val listCategory = categoryDao?.getAll();
+        var listCategory = categoryDao?.getAll();
+        listCategory = listCategory?.sortedWith(Comparator { t1, t2 -> Collator.getInstance(Locale.FRANCE).compare(t1.name,t2.name) })
         listCategory?.forEach {
             navView.menu.add(Menu.NONE, it.id, Menu.NONE, it.name);
         }
