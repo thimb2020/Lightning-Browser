@@ -38,7 +38,7 @@ interface TabInitializer {
 /**
  * An initializer that loads a [url].
  */
-class UrlInitializer(private val url: String) : TabInitializer {
+class UrlInitializer(public val url: String) : TabInitializer {
 
     override fun initialize(webView: WebView, headers: Map<String, String>) {
         webView.loadUrl(url, headers)

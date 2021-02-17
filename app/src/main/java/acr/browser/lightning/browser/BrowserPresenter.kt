@@ -290,18 +290,25 @@ class BrowserPresenter(
         }
 
         logger.log(TAG, "New tab, show: $show")
+        val startingTab: LightningView
+        if (tabsModel.allTabs.isEmpty()) {
+            startingTab = tabsModel.newTab(view as Activity, tabInitializer, isIncognito)
+            if (tabsModel.size() == 1) {
+                startingTab.resumeTimers()
+            }
 
-        val startingTab = tabsModel.newTab(view as Activity, tabInitializer, isIncognito)
-        if (tabsModel.size() == 1) {
-            startingTab.resumeTimers()
+            view.notifyTabViewAdded()
+            view.updateTabNumber(tabsModel.size())
+
+            if (show) {
+                onTabChanged(tabsModel.switchToTab(tabsModel.last()))
+            }
+        } else {
+            startingTab = tabsModel.lastTab()!!
+            val url = (tabInitializer as UrlInitializer).url
+            startingTab.loadUrl(url)
         }
 
-        view.notifyTabViewAdded()
-        view.updateTabNumber(tabsModel.size())
-
-        if (show) {
-            onTabChanged(tabsModel.switchToTab(tabsModel.last()))
-        }
 
         return true
     }

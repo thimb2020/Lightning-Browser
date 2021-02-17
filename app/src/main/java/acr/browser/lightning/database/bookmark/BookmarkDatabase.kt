@@ -131,11 +131,13 @@ class BookmarkDatabase @Inject constructor(
     }
 
     override fun addBookmarkIfNotExists(entry: Bookmark.Entry): Single<Boolean> = Single.fromCallable {
+/*
         queryWithOptionalEndSlash(entry.url).use {
             if (it.moveToFirst()) {
                 return@fromCallable false
             }
         }
+*/
 
         val id = database.insert(
             TABLE_BOOKMARK,

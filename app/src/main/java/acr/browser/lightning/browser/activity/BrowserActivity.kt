@@ -271,7 +271,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
                 }
             }
         }
-
+        tabsManager.shutdown()
         presenter = BrowserPresenter(
                 this,
                 isIncognito(),
