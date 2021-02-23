@@ -12,10 +12,7 @@ import acr.browser.lightning.html.homepage.HomePageFactory
 import acr.browser.lightning.log.Logger
 import acr.browser.lightning.preference.UserPreferences
 import acr.browser.lightning.ssl.SslState
-import acr.browser.lightning.view.BundleInitializer
-import acr.browser.lightning.view.LightningView
-import acr.browser.lightning.view.TabInitializer
-import acr.browser.lightning.view.UrlInitializer
+import acr.browser.lightning.view.*
 import acr.browser.lightning.view.find.FindResults
 import android.app.Activity
 import android.content.Intent
@@ -291,7 +288,7 @@ class BrowserPresenter(
 
         logger.log(TAG, "New tab, show: $show")
         val startingTab: LightningView
-        if (tabsModel.allTabs.isEmpty()) {
+        if (tabsModel.allTabs.isEmpty() || tabInitializer is HistoryPageInitializer) {
             startingTab = tabsModel.newTab(view as Activity, tabInitializer, isIncognito)
             if (tabsModel.size() == 1) {
                 startingTab.resumeTimers()

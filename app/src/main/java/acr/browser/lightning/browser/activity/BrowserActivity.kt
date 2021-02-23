@@ -340,7 +340,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
         tabCountView = customView.findViewById(R.id.tab_count_view)
         homeImageView = customView.findViewById(R.id.home_image_view)
         if (shouldShowTabsInDrawer && !isIncognito()) {
-            tabCountView?.visibility = VISIBLE
+            tabCountView?.visibility = GONE
             homeImageView?.visibility = GONE
         } else if (shouldShowTabsInDrawer) {
             tabCountView?.visibility = GONE
@@ -419,6 +419,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
             proxyUtils.checkForProxy(this)
         }
     }
+
 
     private fun getBookmarksContainerId(): Int = if (swapBookmarksAndTabs) {
         R.id.left_drawer
@@ -1179,6 +1180,7 @@ abstract class BrowserActivity : ThemableBrowserActivity(), BrowserView, UIContr
 
     override fun onResume() {
         super.onResume()
+        bookmarksView?.updateTitle()
         logger.log(TAG, "onResume")
         if (swapBookmarksAndTabs != userPreferences.bookmarksAndTabsSwapped) {
             restart()

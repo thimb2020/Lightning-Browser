@@ -21,7 +21,7 @@
     </FrameLayout>
     <FrameLayout
         android:id="@+id/home_button"
-        android:layout_width="?attr/actionBarSize"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:background="?attr/actionBarItemBackground"
         android:clickable="true"
@@ -41,7 +41,7 @@
             android:layout_height="@dimen/material_grid_small_icon"
             android:layout_gravity="center"
             app:tabIconBorderRadius="2dp"
-            app:tabIconBorderWidth="3dp"
+            app:tabIconBorderWidth="0dp"
             app:tabIconColor="?attr/iconColor"
             app:tabIconTextSize="14dp" />
     </FrameLayout>

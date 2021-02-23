@@ -1,6 +1,7 @@
 package acr.browser.lightning.browser.bookmarks
 
 import acr.browser.lightning.R
+import acr.browser.lightning.Static
 import acr.browser.lightning.adblock.allowlist.AllowListModel
 import acr.browser.lightning.animation.AnimationUtils
 import acr.browser.lightning.browser.BookmarksView
@@ -8,6 +9,7 @@ import acr.browser.lightning.browser.TabsManager
 import acr.browser.lightning.controller.UIController
 import acr.browser.lightning.database.Bookmark
 import acr.browser.lightning.database.bookmark.BookmarkRepository
+import acr.browser.lightning.database.dao.AppDatabase
 import acr.browser.lightning.di.DatabaseScheduler
 import acr.browser.lightning.di.MainScheduler
 import acr.browser.lightning.di.NetworkScheduler
@@ -19,6 +21,7 @@ import acr.browser.lightning.extensions.color
 import acr.browser.lightning.extensions.drawable
 import acr.browser.lightning.extensions.inflater
 import acr.browser.lightning.favicon.FaviconModel
+import acr.browser.lightning.loader.Constants
 import acr.browser.lightning.reading.activity.ReadingActivity
 import acr.browser.lightning.utils.isSpecialUrl
 import android.app.Activity
@@ -48,7 +51,7 @@ class BookmarksDrawerView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr), BookmarksView {
-
+    private lateinit var db: AppDatabase
     @Inject internal lateinit var bookmarkModel: BookmarkRepository
     @Inject internal lateinit var allowListModel: AllowListModel
     @Inject internal lateinit var bookmarksDialogBuilder: LightningDialogBuilder
@@ -105,13 +108,13 @@ class BookmarksDrawerView @JvmOverloads constructor(
             ::handleItemLongPress,
             ::handleItemClick
         )
-
+        db = AppDatabase(context)
         bookmarkRecyclerView?.let {
             it.layoutManager = LinearLayoutManager(context)
             it.adapter = bookmarkAdapter
         }
 
-        setBookmarksShown(null, true)
+        //setBookmarksShown(null, true)
     }
 
     override fun onDetachedFromWindow() {
@@ -163,11 +166,16 @@ class BookmarksDrawerView @JvmOverloads constructor(
     }
 
     private fun setBookmarkDataSet(items: List<Bookmark>, animate: Boolean) {
+        db = AppDatabase(context)
+        val abc: List<Bookmark.Entry>
+
+        //val bookmarks = db.newsDao.findLinksStart().map { Bookmark(it.url!!, it.name!!) }
+        //bookmarkAdapter?.updateItems(items.map { BookmarksViewModel(it) })
         bookmarkAdapter?.updateItems(items.map { BookmarksViewModel(it) })
         val resource = if (uiModel.isCurrentFolderRoot()) {
-            R.drawable.ic_action_star
+            R.drawable.ic_action_tabs
         } else {
-            R.drawable.ic_action_back
+            R.drawable.ic_action_tabs
         }
 
         if (animate) {
@@ -245,6 +253,10 @@ class BookmarksDrawerView @JvmOverloads constructor(
             setBookmarksShown(null, true)
             bookmarkRecyclerView?.layoutManager?.scrollToPosition(scrollIndex)
         }
+    }
+    override fun updateTitle() {
+        var title:TextView = findViewById(R.id.bookmark_title)
+        title.text = db.newsDao?.getStartCategory()?.name
     }
 
     override fun handleUpdatedUrl(url: String) {
@@ -344,12 +356,12 @@ class BookmarksDrawerView @JvmOverloads constructor(
             val url = viewModel.bookmark.url
             holder.favicon.tag = url
 
-            viewModel.icon?.let {
+/*            viewModel.icon?.let {
                 holder.favicon.setImageBitmap(it)
                 return
-            }
+            }*/
 
-            val imageDrawable = when (viewModel.bookmark) {
+/*            val imageDrawable = when (viewModel.bookmark) {
                 is Bookmark.Folder -> folderIcon
                 is Bookmark.Entry -> webpageIcon.also {
                     faviconFetchSubscriptions[url]?.dispose()
@@ -366,9 +378,11 @@ class BookmarksDrawerView @JvmOverloads constructor(
                             }
                         )
                 }
-            }
+            }*/
 
-            holder.favicon.setImageDrawable(imageDrawable)
+            //holder.favicon.setImageDrawable(imageDrawable)
+            Static.getIL(holder.itemView.getContext()).displayImage(
+                    Constants.GOOGLE_FAVIICON_URL +url, holder.favicon, true);
         }
 
         override fun getItemCount() = bookmarks.size

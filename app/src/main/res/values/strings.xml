@@ -3,16 +3,16 @@
     <string name="app_name">American News</string>
     <string name="share_app_title">American News - Top News App</string>
     <string name="app_url">https://play.google.com/store/apps/details?id=com.worldnews.us</string>
-    <string name="rating_url">market://details?id=com.worldnews.us</string>
+    <string name="rating_url">http://play.google.com/store/apps/details?id=com.worldnews.us</string>
 
-    <string name="store_url">market://search?q=pub:World News, Inc.</string>
+    <string name="store_url">https://play.google.com/store/apps/developer?id=World+News,+Inc.</string>
     <string name="contact_email">smart.worldnews.365@gmail.com</string>
     <string name="nav_header_subtitle">smart.worldnews.365@gmail.com</string>
     <string name="about_mailto">mailto:smart.worldnews.365@gmail.com</string>
     <string name="org_name">World News, Inc.</string>
 
     <string name="action_home">Home</string>
-    <string name="action_rating">Rating</string>
+    <string name="action_rating">Rate and review</string>
     <string name="action_more">More apps</string>
 
     <string name="title_translate">Translate</string>
@@ -30,7 +30,7 @@
 
 
     <string name="action_new_tab">New tab</string>
-    <string name="action_share">Share</string>
+    <string name="action_share">Share with friends</string>
     <string name="action_history">History</string>
     <string name="action_bookmarks">Bookmarks</string>
     <string name="action_downloads">Downloads</string>

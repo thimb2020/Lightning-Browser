@@ -197,7 +197,7 @@ class BookmarkDatabase @Inject constructor(
             null,
             null,
             null,
-            "$KEY_FOLDER, $KEY_POSITION ASC, $KEY_TITLE COLLATE NOCASE ASC, $KEY_URL ASC"
+            "$KEY_FOLDER"
         ).useMap { it.bindToBookmarkEntry() }
     }
 
@@ -210,7 +210,7 @@ class BookmarkDatabase @Inject constructor(
             arrayOf(finalFolder),
             null,
             null,
-            "$KEY_POSITION ASC, $KEY_TITLE COLLATE NOCASE ASC, $KEY_URL ASC"
+            "$KEY_POSITION ASC"
         ).useMap { it.bindToBookmarkEntry() }
     }
 

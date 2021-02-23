@@ -1,6 +1,8 @@
 package acr.browser.lightning.di
 
 import acr.browser.lightning.BrowserApp
+import acr.browser.lightning.HomeActivity
+import acr.browser.lightning.LinkFragment
 import acr.browser.lightning.adblock.BloomFilterAdBlocker
 import acr.browser.lightning.adblock.NoOpAdBlocker
 import acr.browser.lightning.browser.SearchBoxModel
@@ -38,6 +40,9 @@ interface AppComponent {
 
         fun build(): AppComponent
     }
+    fun inject(fragment: LinkFragment)
+    fun inject(activity: HomeActivity)
+
     fun inject(activity: BrowserActivity)
 
     fun inject(fragment: BookmarkSettingsFragment)

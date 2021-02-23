@@ -43,6 +43,7 @@ class TranslateSettingsFragment : AbstractSettingsFragment() {
             val locale = getActivity().getResources().getConfiguration().locale.getLanguage();
             val country = db.countryDao?.findByCode(locale)
             countryId = country!!.id;
+            userPreferences.translateChoice = countryId
         }
         val country = db.countryDao?.findById(countryId)
         clickableDynamicPreference(
@@ -64,14 +65,13 @@ class TranslateSettingsFragment : AbstractSettingsFragment() {
         BrowserDialog.showCustomDialog(activity) {
             setTitle(resources.getString(R.string.title_translate))
 
-            val searchEngineList = searchEngineProvider.provideAllSearchEngines()
             val countryDao = db.countryDao;
             val countries = countryDao?.getAll()
             val chars: Array<CharSequence?> = countries?.map { it.name }!!.collectionsToTypedArray()
 
             //val chars = convertSearchEngineToStringx(searchEngineList)
 
-            val n = userPreferences.translateChoice
+            val n = userPreferences.translateChoice-1
 
             setSingleChoiceItems(chars, n) { _, which ->
                 val country = countries[which]

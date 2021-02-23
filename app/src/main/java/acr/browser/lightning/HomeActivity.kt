@@ -1,14 +1,14 @@
 package acr.browser.lightning
 
+import acr.browser.lightning.database.bookmark.BookmarkRepository
 import acr.browser.lightning.database.dao.AppDatabase
-import acr.browser.lightning.database.dao.dao.CategoryDao
+import acr.browser.lightning.database.dao.model.Category
+import acr.browser.lightning.di.injector
 import acr.browser.lightning.settings.activity.SettingsActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,20 +22,25 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.initialization.InitializationStatus
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener
 import java.text.Collator
 import java.util.*
+import javax.inject.Inject
 import kotlin.Comparator
 
 class HomeActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var db: AppDatabase;
-    lateinit var bookFragment: BookFragment
+    lateinit var bookFragment: LinkFragment
+    @Inject
+    internal lateinit var bookmarkModel: BookmarkRepository
     override fun onCreate(savedInstanceState: Bundle?) {
+        injector.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
+        db = AppDatabase(this);
+        val newsDao = db.newsDao;
+
         MobileAds.initialize(this) {}
         val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
@@ -48,13 +53,23 @@ class HomeActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow), drawerLayout)
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
-
-        bookFragment = BookFragment()
+        bookmarkModel
+                .deleteAllBookmarks()
+                .subscribe()
+        bookFragment = LinkFragment()
         supportFragmentManager.beginTransaction().replace(R.id.nav_host_fragment, bookFragment).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).commit()
-
+        val startCategory = newsDao?.getStartCategory();
+        if (startCategory != null) {
+            supportActionBar?.title = startCategory?.name
+        }
         navView.setNavigationItemSelectedListener {
+            bookmarkModel
+                    .deleteAllBookmarks()
+                    .subscribe()
             supportActionBar?.title = it?.title
-            bookFragment = BookFragment()
+            newsDao?.clearStartCategory();
+            newsDao?.updateStartCategory(it.itemId)
+            bookFragment = LinkFragment()
             val bundle = Bundle()
             bundle.putInt("CategoryId", it.itemId)
             bookFragment.arguments = bundle
@@ -66,10 +81,10 @@ class HomeActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
-        db = AppDatabase(this);
-        val categoryDao = db.categoryDao;
-        var listCategory = categoryDao?.getAll();
-        listCategory = listCategory?.sortedWith(Comparator { t1, t2 -> Collator.getInstance(Locale.FRANCE).compare(t1.name,t2.name) })
+
+
+        var listCategory = newsDao?.findAllCategory();
+       // listCategory = listCategory?.sortedWith(Comparator { t1, t2 -> Collator.getInstance(Locale.FRANCE).compare(t1.name,t2.name) })
         listCategory?.forEach {
             navView.menu.add(Menu.NONE, it.id, Menu.NONE, it.name);
         }

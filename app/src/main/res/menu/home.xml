@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item
-        android:id="@+id/action_home"
-        android:title="@string/action_home" />
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/settings" />
+    <!--    <item
+            android:id="@+id/action_home"
+            android:title="@string/action_home" />-->
+
     <item
         android:id="@+id/action_rating"
         android:title="@string/action_rating" />
@@ -16,4 +14,7 @@
     <item
         android:id="@+id/action_more"
         android:title="@string/action_more" />
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/settings" />
 </menu>

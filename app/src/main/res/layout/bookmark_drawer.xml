@@ -22,9 +22,10 @@
             android:background="?attr/actionBarItemBackground"
             android:contentDescription="@string/action_back"
             android:scaleType="center"
-            app:srcCompat="@drawable/ic_action_star" />
+            app:srcCompat="@drawable/ic_action_tabs" />
 
         <TextView
+            android:id="@+id/bookmark_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/material_grid_margin"
@@ -50,6 +51,7 @@
         android:background="?attr/dividerColor"
         android:baselineAligned="false"
         android:orientation="horizontal"
+        android:visibility="gone"
         android:weightSum="3">
 
         <ImageView

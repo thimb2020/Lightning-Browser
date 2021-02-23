@@ -255,6 +255,7 @@ class TabsManager @Inject constructor(
         isIncognito: Boolean
     ): LightningView {
         logger.log(TAG, "New tab")
+        shutdown();
         val tab = LightningView(
             activity,
             tabInitializer,

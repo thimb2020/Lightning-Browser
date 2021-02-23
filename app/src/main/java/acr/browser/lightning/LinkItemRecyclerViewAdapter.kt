@@ -1,7 +1,6 @@
 package acr.browser.lightning
 
-import acr.browser.lightning.database.dao.AppDatabase.Companion.invoke
-import acr.browser.lightning.database.dao.model.Chapter
+import acr.browser.lightning.database.dao.model.Link
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -14,20 +13,17 @@ import acr.browser.lightning.loader.Constants
 import android.content.Intent
 import android.util.Log
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
-import coil.load
-import kotlinx.android.synthetic.main.two_line_autocomplete.view.*
 import javax.inject.Inject
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].
  * TODO: Replace the implementation with code for your data type.
  */
-class BookItemRecyclerViewAdapter(
-        private val values: List<Chapter>)
-    : RecyclerView.Adapter<BookItemRecyclerViewAdapter.ViewHolder>() {
+class LinkItemRecyclerViewAdapter(
+        private var values: List<Link>)
+    : RecyclerView.Adapter<LinkItemRecyclerViewAdapter.ViewHolder>() {
     @Inject
     internal lateinit var faviconModel: FaviconModel
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -48,7 +44,10 @@ class BookItemRecyclerViewAdapter(
             startActivity(holder.itemView.getContext(), intent, null)
         }
     }
-
+    fun setData(dataList: List<Link>) {
+        this.values= dataList //this datalist is a list defined in your adapter
+        notifyDataSetChanged()
+    }
     override fun getItemCount(): Int = values.size
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

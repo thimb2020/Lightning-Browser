@@ -45,8 +45,10 @@ public class CommonUtils {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
 
         shareIntent.setType("text/plain");
+        String shareMessage= "\nLet me recommend you this application\n\n";
+        shareMessage = shareMessage+ context.getString(R.string.app_url);
         shareIntent.putExtra(Intent.EXTRA_TEXT,
-                context.getString(R.string.app_url));
+                shareMessage);
         shareIntent.putExtra(Intent.EXTRA_SUBJECT,
                 context.getString(R.string.share_app_title));
 
